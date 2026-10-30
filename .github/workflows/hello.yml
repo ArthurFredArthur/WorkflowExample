@@ -13,11 +13,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: show date
-        run:   date "+%Y-%m-%d %H:%M:%S"
-      - name: show username
-        run: whoami
-      - name: free space available
-        run: df -h 
-      - name: welcome ${{env.NOM}}
-        run: echo 'Hi ${{env.NOM}}'
+      - name: liste fichier
+        run: ls - ls
+      - name: clonne depot
+        uses: actions/checkout@v4
+      - name: liste fichier
+        run: ls -la
