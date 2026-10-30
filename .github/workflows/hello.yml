@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: liste fichier
-        run: ls - ls
+        run: ls -la
       - name: clonne depot
         uses: actions/checkout@v4
       - name: liste fichier
