@@ -1,5 +1,6 @@
 name: hello Workflow
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   worl
