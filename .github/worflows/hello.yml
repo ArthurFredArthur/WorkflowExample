@@ -1,0 +1,12 @@
+name: hello Workflow
+on:
+  push:
+    branches: [main]
+  worl
+
+jobs:
+  build:
+    run-on: ubuntu-latest
+    steps:
+      - name: say hello
+        run: echo 'Bonjour GitHub Actions !'
