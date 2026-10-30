@@ -6,6 +6,8 @@ on:
       - main
   push:
     branches: [main]
+env:
+  NOM: Atangana luc
 
 jobs:
   build:
@@ -17,3 +19,5 @@ jobs:
         run: whoami
       - name: free space available
         run: df -h 
+      - name: welcome ${{env.NOM}}
+        run: echo 'Hi ${{env.NOM}}'
