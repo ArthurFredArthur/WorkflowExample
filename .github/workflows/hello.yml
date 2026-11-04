@@ -1,4 +1,4 @@
-name: Exercice 2.5 - Mise en cache des dépendances
+name: Exercice 3.2 - Gestion des artefacts
 
 on:
   push:
@@ -18,12 +18,23 @@ jobs:
         run: echo "Vérification du style du code (Linter)..."
 
   build:
-    name: Construction
+    name: Construction & Artefact
     needs: [lint]
     runs-on: ubuntu-latest
     steps:
+      - name: Recuperation du depot
+        uses: actions/checkout@v4
+
       - name: Simuler la compilation
-        run: echo "Compilation en cours..."
+        run: |
+          echo "Compilation en cours..."
+          echo "Rapport de build réussi" > build-report.txt
+
+      - name: Sauvegarder le rapport
+        uses: actions/upload-artifact@v4
+        with:
+          name: mon-artefact
+          path: build-report.txt
 
   unit-tests:
     name: Tests Unitaires (Node v${{ matrix.node-version }})
@@ -48,10 +59,26 @@ jobs:
           node -v
           echo "10 tests unitaires exécutés : 10 réussis, 0 échoués"
 
-  test:
-    name: Tests d'intégration / Finaux
+  security-check:
+    name: Vérification Sécurisée (Secrets)
     needs: [unit-tests]
     runs-on: ubuntu-latest
     steps:
+      - name: Utiliser un secret masqué
+        env:
+          MY_SECRET_TOKEN: ${{ secrets.MON_SUPER_SECRET }}
+        run: |
+          echo "Connexion au service distant avec le token sécurisé..."
+          if [ -n "$MY_SECRET_TOKEN" ]; then
+            echo "Token personnalisé détecté et injecté avec succès."
+          else
+            echo "Aucun secret personnalisé configuré (tu peux en ajouter un dans les paramètres du dépôt)."
+          fi
+
+  test:
+    name: Tests d'intégration / Finaux
+    needs: [security-check]
+    runs-on: ubuntu-latest
+    steps:
       - name: Simuler les tests finaux
-        run: echo "Tests finaux en cours (toutes les versions de Node.js ont réussi !)"
+        run: echo "Tests finaux en cours (artefacts sauvegardés, sécurité validée et tests réussis !)"
