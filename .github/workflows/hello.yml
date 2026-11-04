@@ -1,21 +1,30 @@
-name: hello Workflow
+name: Exercice 2.1 - Jobs Séquentiels
+
 on:
-  workflow_dispatch:
-  pull_request:
-    branches:
-      - main
   push:
-    branches: [main]
-env:
-  NOM: Atangana luc
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - name: liste fichier
-        run: ls -la
-      - name: clonne depot
+      - name: recuperation du depot
         uses: actions/checkout@v4
-      - name: liste fichier
-        run: ls -la
+      - name: lancer les lint
+        run: echo "Vérification du style du code (Linter)..."
+  build:
+    name: Construction
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simuler la compilation
+        run: echo "Compilation en cours..."
+
+  test:
+    name: Tests
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simuler les tests
+        run: echo "Tests en cours (le build a réussi !)"
