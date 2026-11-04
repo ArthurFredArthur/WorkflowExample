@@ -47,12 +47,7 @@ jobs:
       - name: Recuperation du depot
         uses: actions/checkout@v4
 
-      - name: Configurer Node.js avec cache
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
+  
       - name: Executer les tests unitaires
         run: |
           echo "Exécution des tests avec Node.js version ${{ matrix.node-version }}"
