@@ -1,4 +1,4 @@
-name: Exercice 3.2 - Gestion des artefacts
+name: Exercice 3.3 - Téléchargement d'artefacts
 
 on:
   push:
@@ -47,6 +47,12 @@ jobs:
       - name: Recuperation du depot
         uses: actions/checkout@v4
 
+      - name: Configurer Node.js avec cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
       - name: Executer les tests unitaires
         run: |
           echo "Exécution des tests avec Node.js version ${{ matrix.node-version }}"
@@ -70,9 +76,16 @@ jobs:
           fi
 
   test:
-    name: Tests d'intégration / Finaux
+    name: Téléchargement et Vérification de l'Artefact
     needs: [security-check]
     runs-on: ubuntu-latest
     steps:
-      - name: Simuler les tests finaux
-        run: echo "Tests finaux en cours (artefacts sauvegardés, sécurité validée et tests réussis !)"
+      - name: Télécharger l'artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: mon-artefact
+
+      - name: Afficher le contenu du rapport
+        run: |
+          echo "Affichage du contenu du fichier récupéré :"
+          cat build-report.txt
