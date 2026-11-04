@@ -1,4 +1,4 @@
-name: Exercice 2.1 - Jobs Séquentiels
+name: Exercice 2.4 - Matrice de versions
 
 on:
   push:
@@ -8,23 +8,49 @@ on:
 
 jobs:
   lint:
+    name: Linter
     runs-on: ubuntu-latest
     steps:
-      - name: recuperation du depot
+      - name: Recuperation du depot
         uses: actions/checkout@v4
-      - name: lancer les lint
+
+      - name: Lancer le lint
         run: echo "Vérification du style du code (Linter)..."
+
   build:
     name: Construction
+    needs: [lint]
     runs-on: ubuntu-latest
     steps:
       - name: Simuler la compilation
         run: echo "Compilation en cours..."
 
-  test:
-    name: Tests
+  unit-tests:
+    name: Tests Unitaires (Node v${{ matrix.node-version }})
     needs: [build]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20]
     steps:
-      - name: Simuler les tests
-        run: echo "Tests en cours (le build a réussi !)"
+      - name: Recuperation du depot
+        uses: actions/checkout@v4
+
+      - name: Configurer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Executer les tests unitaires
+        run: |
+          echo "Exécution des tests avec Node.js version ${{ matrix.node-version }}"
+          node -v
+          echo "10 tests unitaires exécutés : 10 réussis, 0 échoués"
+
+  test:
+    name: Tests d'intégration / Finaux
+    needs: [unit-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simuler les tests finaux
+        run: echo "Tests finaux en cours (toutes les versions de Node.js ont réussi !)"
